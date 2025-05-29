@@ -56,7 +56,6 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
       const serialized = annotation.serializeAnnotation()
       console.log('serialized ::', serialized)
       
-      resultText.value = annotation
       
       try {
         const savedAnnotations = loadAnnotations()
@@ -78,6 +77,9 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
           id: taskId,
           result: savedAnnotations[taskId]
         }]
+
+        resultText.value = annotation
+        resultText.value._initialAnnotationObj = serialized
       } catch (error) {
         console.error('어노테이션 업데이트 중 오류 발생:', error)
       }
