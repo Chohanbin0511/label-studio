@@ -17,11 +17,8 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
     },
 
     onSubmitAnnotation: (LS: any, annotation: any) => {
-      console.log('onSubmit LS ::', LS)
       selectedAnnotation = annotation
-      console.log('onSubmit annotation ::', annotation.id)
       const serialized = annotation.serializeAnnotation()
-      console.log('serialized ::', serialized)
       
       resultText.value = annotation
       
@@ -51,8 +48,6 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
     },
 
     onUpdateAnnotation: (LS: any, annotation: any) => {
-      console.log('어노테이션 업데이트 annotation:', annotation)
-      console.log('어노테이션 업데이트 LS:', LS)
       const serialized = annotation.serializeAnnotation()
       console.log('serialized ::', serialized)
       
@@ -91,8 +86,6 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
       try {
         // 선택된 어노테이션이 있으면 그 정보를 사용
         const taskId = selectedAnnotation?.pk
-        console.log('삭제할 taskId:', taskId)
-        console.log('선택된 어노테이션:', selectedAnnotation)
         
         const isDeleted = deleteAnnotation(taskId)
         if (isDeleted) {
@@ -111,7 +104,6 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
     },
 
     onSelectAnnotation: (LS: any) => {
-      console.log('selectAnnotation LS ::', LS)
       resultText.value = LS
       // 선택된 어노테이션 저장
       selectedAnnotation = LS
