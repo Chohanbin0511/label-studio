@@ -18,6 +18,7 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
 
     onSubmitAnnotation: (LS: any, annotation: any) => {
       console.log('onSubmit LS ::', LS)
+      selectedAnnotation = annotation
       console.log('onSubmit annotation ::', annotation.id)
       const serialized = annotation.serializeAnnotation()
       console.log('serialized ::', serialized)
@@ -60,7 +61,7 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
       try {
         const savedAnnotations = loadAnnotations()
         console.log('onUpdate savedAnnotations ::', savedAnnotations)
-        const taskId = selectedAnnotation?.pk
+        const taskId = selectedAnnotation?.pk ? selectedAnnotation.pk : selectedAnnotation.id
         
         if (serialized && Array.isArray(serialized)) {
           savedAnnotations[taskId] = serialized
