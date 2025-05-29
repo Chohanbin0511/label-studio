@@ -1,0 +1,20 @@
+{
+  "text-task-1": {
+    "id": "2",
+    "result": [
+      {
+        "id": "r2",
+        "type": "labels",
+        "value": {
+          "start": 0,
+          "end": 13,
+          "text": "Label Studio는",
+          "labels": ["빨간", "주황", "파랑", "초록", "보라"]
+        },
+        "origin": "manual",
+        "to_name": "text",
+        "from_name": "label"
+      }
+    ]
+  }
+} 

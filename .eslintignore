@@ -1,0 +1,7 @@
+dist
+dist-ssr
+*.local
+coverage
+.vite
+node_modules
+.pnpm-store 

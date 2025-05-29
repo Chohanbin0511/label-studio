@@ -1,0 +1,111 @@
+import { STORAGE_KEY, saveAnnotations, loadAnnotations, deleteAnnotation } from './label-studio'
+
+export function createLabelStudioHandlers(task: any, resultText: any) {
+  // 선택된 어노테이션을 저장할 변수
+  let selectedAnnotation: any = null
+
+  return {
+    onLabelStudioLoad: (LS: any) => {
+      console.log('Label Studio 로드 완료')
+    },
+
+    onSubmitAnnotation: (LS: any, annotation: any) => {
+      console.log('onSubmit LS ::', LS)
+      console.log('onSubmit annotation ::', annotation.id)
+      const serialized = annotation.serializeAnnotation()
+      console.log('serialized ::', serialized)
+      
+      resultText.value = annotation
+      
+      try {
+        const savedAnnotations = loadAnnotations()
+        console.log('onSubmit savedAnnotations ::', savedAnnotations)
+        const taskId = annotation.id
+        
+        if (serialized && Array.isArray(serialized)) {
+          savedAnnotations[taskId] = serialized
+        } else if (serialized && serialized.result && Array.isArray(serialized.result)) {
+          savedAnnotations[taskId] = serialized.result
+        } else {
+          console.error('유효하지 않은 어노테이션 데이터:', serialized)
+          return
+        }
+        
+        saveAnnotations(savedAnnotations)
+        
+        task.annotations = [{
+          id: taskId,
+          result: savedAnnotations[taskId]
+        }]
+      } catch (error) {
+        console.error('어노테이션 저장 중 오류 발생:', error)
+      }
+    },
+
+    onUpdateAnnotation: (LS: any, annotation: any) => {
+      console.log('어노테이션 업데이트 annotation:', annotation)
+      console.log('어노테이션 업데이트 LS:', LS)
+      const serialized = annotation.serializeAnnotation()
+      console.log('serialized ::', serialized)
+      
+      resultText.value = annotation
+      
+      try {
+        const savedAnnotations = loadAnnotations()
+        console.log('onUpdate savedAnnotations ::', savedAnnotations)
+        const taskId = selectedAnnotation?.pk
+        
+        if (serialized && Array.isArray(serialized)) {
+          savedAnnotations[taskId] = serialized
+        } else if (serialized && serialized.result && Array.isArray(serialized.result)) {
+          savedAnnotations[taskId] = serialized.result
+        } else {
+          console.error('유효하지 않은 어노테이션 데이터:', serialized)
+          return
+        }
+        
+        saveAnnotations(savedAnnotations)
+        
+        task.annotations = [{
+          id: taskId,
+          result: savedAnnotations[taskId]
+        }]
+      } catch (error) {
+        console.error('어노테이션 업데이트 중 오류 발생:', error)
+      }
+    },
+
+    onDeleteAnnotation: (LS: any, annotation: any) => {
+      resultText.value = null
+      
+      try {
+        // 선택된 어노테이션이 있으면 그 정보를 사용
+        const taskId = selectedAnnotation?.pk
+        console.log('삭제할 taskId:', taskId)
+        console.log('선택된 어노테이션:', selectedAnnotation)
+        
+        const isDeleted = deleteAnnotation(taskId)
+        if (isDeleted) {
+          console.log('어노테이션 삭제 성공')
+          selectedAnnotation = null // 삭제 후 선택된 어노테이션 초기화
+        } else {
+          console.log('어노테이션 삭제 실패 - 저장된 데이터와 taskId가 일치하지 않을 수 있음')
+        }
+      } catch (error) {
+        console.error('어노테이션 삭제 중 오류 발생:', error)
+      }
+    },
+
+    onSkipTask: (LS: any) => {
+      console.log('태스크 스킵:', LS)
+    },
+
+    onSelectAnnotation: (LS: any) => {
+      console.log('selectAnnotation LS ::', LS)
+      resultText.value = LS
+      // 선택된 어노테이션 저장
+      selectedAnnotation = LS
+      console.log('선택된 어노테이션 저장됨:', selectedAnnotation)
+    }
+  }
+} 
