@@ -7,6 +7,13 @@ export function createLabelStudioHandlers(task: any, resultText: any) {
   return {
     onLabelStudioLoad: (LS: any) => {
       console.log('Label Studio 로드 완료')
+      // 마지막 어노테이션이 있고 selectedAnnotation이 null이면 자동 선택
+      if (task.annotations && task.annotations.length > 0 && !selectedAnnotation) {
+        const lastAnnotation = task.annotations[task.annotations.length - 1]
+        selectedAnnotation = lastAnnotation
+        resultText.value = lastAnnotation
+        console.log('마지막 어노테이션 자동 선택:', lastAnnotation)
+      }
     },
 
     onSubmitAnnotation: (LS: any, annotation: any) => {
