@@ -6,6 +6,7 @@ import { RouterView } from 'vue-router'
   <div class="app">
     <nav class="nav">
       <router-link to="/label-studio">Label Studio</router-link>
+      <router-link to="/diff-demo">Diff Demo</router-link>
     </nav>
     <RouterView />
   </div>

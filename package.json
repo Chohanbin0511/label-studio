@@ -20,6 +20,8 @@
     "axios": "^1.6.7",
     "crypto-js": "^4.2.0",
     "dayjs": "^1.11.11",
+    "diff": "^8.0.2",
+    "diff2html": "^3.4.51",
     "element-plus": "^2.9.3",
     "label-studio": "^1.0.1",
     "mitt": "^3.0.1",

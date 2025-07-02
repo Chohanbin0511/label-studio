@@ -9,7 +9,11 @@ const routes = [
   {
     path: '/label-studio',
     component: () => import('../pages/label-studio.vue')
-  }
+  },
+  {
+    path: '/diff-demo',
+    component: () => import('../pages/DiffDemo.vue')
+  },
 ]
 
 const router = createRouter({
