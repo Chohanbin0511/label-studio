@@ -14,8 +14,8 @@ const diffContainer = ref<HTMLElement>()
 
 // Options
 const options = ref({
-  drawFileList: true,
-  outputFormat: 'line-by-line' as 'line-by-line' | 'side-by-side',
+  drawFileList: false,
+  outputFormat: 'side-by-side' as 'line-by-line' | 'side-by-side',
   highlight: true
 })
 
@@ -104,30 +104,32 @@ const clearAll = () => {
 }
 
 const loadSampleData = () => {
-  originalText.value = `function calculateSum(a, b) {
-  return a + b;
-}
+  originalText.value = 
+  `function calculateSum(a, b) {
+      return a + b;
+    }
 
-const numbers = [1, 2, 3, 4, 5];
-const result = numbers.reduce((acc, num) => acc + num, 0);
+    const numbers = [1, 2, 3, 4, 5];
+    const result = numbers.reduce((acc, num) => acc + num, 0);
 
-console.log('Sum:', result);`
+    console.log('Sum:', result);`
 
-  modifiedText.value = `function calculateSum(a, b, c = 0) {
-  // Added optional third parameter
-  return a + b + c;
-}
+  modifiedText.value = 
+  `function calculateSum(a, b, c = 0) {
+    // Added optional third parameter
+    return a + b + c;
+  }
 
-function calculateProduct(a, b) {
-  return a * b;
-}
+  function calculateProduct(a, b) {
+    return a * b;
+  }
 
-const numbers = [1, 2, 3, 4, 5, 6];
-const sum = numbers.reduce((acc, num) => acc + num, 0);
-const product = numbers.reduce((acc, num) => acc * num, 1);
+  const numbers = [1, 2, 3, 4, 5, 6];
+  const sum = numbers.reduce((acc, num) => acc + num, 0);
+  const product = numbers.reduce((acc, num) => acc * num, 1);
 
-console.log('Sum:', sum);
-console.log('Product:', product);`
+  console.log('Sum:', sum);
+  console.log('Product:', product);`
 
   // Auto generate diff after loading sample data
   setTimeout(() => generateDiff(), 100)
@@ -145,47 +147,50 @@ watch(
 )
 
 // Code examples for documentation
-const basicUsageCode = `import { ref } from 'vue'
-import * as Diff2Html from 'diff2html'
-import { createTwoFilesPatch } from 'diff'
-import 'diff2html/bundles/css/diff2html.min.css'
+const basicUsageCode = `// 필요한 패키지들 import
+import { ref } from 'vue'                              
+import * as Diff2Html from 'diff2html'                 // diff2html 라이브러리
+import { createTwoFilesPatch } from 'diff'             // diff 생성 함수
+import 'diff2html/bundles/css/diff2html.min.css'       // diff2html 스타일시트
 
-const originalText = ref('')
-const modifiedText = ref('')
-const diffHtml = ref('')
+// 반응형 상태 정의
+const originalText = ref('')                           // 원본 텍스트
+const modifiedText = ref('')                           // 수정된 텍스트
+const diffHtml = ref('')                               // 생성된 diff HTML
 
+// diff 생성 함수
 const generateDiff = () => {
-  const patch = createTwoFilesPatch(
-    'original.txt',
-    'modified.txt',
-    originalText.value,
-    modifiedText.value
+  const patch = createTwoFilesPatch(                   // 두 파일의 패치 생성
+    'original.txt',                                    // 원본 파일명
+    'modified.txt',                                    // 수정된 파일명
+    originalText.value,                                // 원본 텍스트 내용
+    modifiedText.value                                 // 수정된 텍스트 내용
   )
   
-  diffHtml.value = Diff2Html.html(patch, {
-    drawFileList: true,
-    outputFormat: 'side-by-side'
+  diffHtml.value = Diff2Html.html(patch, {             // HTML로 변환
+    drawFileList: true,                                // 파일 목록 표시
+    outputFormat: 'side-by-side'                       // 좌우 배치 형식
   })
 }`
 
-const advancedUsageCode = `const diff2htmlOptions = {
-  drawFileList: true,
-  outputFormat: 'side-by-side',
-  synchronisedScroll: true,
-  highlight: true,
-  fileListToggle: true,
-  fileListStartVisible: false,
-  fileContentToggle: true,
-  maxLineSizeInBlockForComparison: 200,
-  maxLineLengthHighlight: 10000,
-  renderNothingWhenEmpty: false
+const advancedUsageCode = 
+`const diff2htmlOptions = {
+  drawFileList: true,                                  // diff 앞에 파일 목록 표시 여부
+  outputFormat: 'side-by-side',                        // 출력 형식: 'line-by-line' 또는 'side-by-side'
+  synchronisedScroll: true,                            // side-by-side 모드에서 두 패널 스크롤 동기화
+  highlight: true,                                     // 코드 구문 강조 표시 여부
+  fileListToggle: true,                                // 파일 목록 토글(접기/펼치기) 가능 여부
+  fileListStartVisible: false,                         // 파일 목록이 처음에 보이는지 여부
+  fileContentToggle: true,                             // 각 파일 내용을 개별적으로 토글 가능 여부
+  maxLineSizeInBlockForComparison: 200,                // 블록 비교 시 더 큰 라인의 최대 문자 수
+  maxLineLengthHighlight: 10000,                       // diff 변경사항 강조 표시할 라인의 최대 길이
+  renderNothingWhenEmpty: false                        // 변경사항이 없을 때 아무것도 렌더링 안할지 여부
 }`
 </script>
 
 <template>
   <div class="diff-demo">
     <h1>Diff2HTML Vue 3 Demo</h1>
-    <!-- Text Comparison with diff2html -->
     <div>
       <h3>텍스트 비교</h3>
       <div class="text-input-section">
@@ -257,6 +262,10 @@ const advancedUsageCode = `const diff2htmlOptions = {
 
       <!-- Diff Display using diff2html -->
       <div class="diff-container">
+        <div v-if="stats && diffHtml" class="github-style-stats">
+          <span class="additions">+{{ stats.added }} additions</span>
+          <span class="deletions">-{{ stats.removed }} deletions</span>
+        </div>
         <div v-if="loading">
           Generating diff...
         </div>
@@ -275,22 +284,6 @@ const advancedUsageCode = `const diff2htmlOptions = {
           텍스트를 입력하고 'Diff 생성' 버튼을 클릭하세요
         </div>
       </div>
-
-      <!-- Statistics -->
-      <div v-if="stats">
-        <h4>통계:</h4>
-        <div>
-          <div>
-            <span>추가된 라인: {{ stats.added }}</span>
-          </div>
-          <div>
-            <span>삭제된 라인: {{ stats.removed }}</span>
-          </div>
-          <div>
-            <span>변경된 라인: {{ stats.changed }}</span>
-          </div>
-        </div>
-      </div>
     </div>
 
     <!-- Instructions -->
@@ -305,7 +298,6 @@ const advancedUsageCode = `const diff2htmlOptions = {
         <h4>2. 기본 사용법</h4>
         <pre><code>{{ basicUsageCode }}</code></pre>
       </div>
-
       <div class="instruction-section">
         <h4>3. 고급 사용법</h4>
         <pre><code>{{ advancedUsageCode }}</code></pre>
@@ -377,5 +369,28 @@ const advancedUsageCode = `const diff2htmlOptions = {
   border-radius: 4px;
   overflow-x: auto;
   margin: 0;
+  margin-bottom: 20px;
+}
+
+.github-style-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #f6f8fa;
+  border: 1px solid #d1d9e0;
+  border-radius: 6px 6px 0 0;
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+
+.additions {
+  color: #1a7f37;
+  font-weight: 600;
+}
+
+.deletions {
+  color: #d1242f;
+  font-weight: 600;
 }
 </style> 
