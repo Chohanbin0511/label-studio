@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, nextTick, watch } from 'vue'
+import { ref, computed, nextTick, watch, onMounted } from 'vue'
 import * as Diff2Html from 'diff2html'
 import { createTwoFilesPatch } from 'diff'
 import 'diff2html/bundles/css/diff2html.min.css'
@@ -42,12 +42,12 @@ const generateDiff = async () => {
     
     // Create unified diff
     const patch = createTwoFilesPatch(
-      'original.txt',
-      'modified.txt',
+      '현재 버전',
+      '선택 버전',
       originalText.value,
       modifiedText.value,
-      'Original',
-      'Modified'
+      'Prompt',
+      'Prompt'
     )
 
     // Configure diff2html options
@@ -186,6 +186,10 @@ const advancedUsageCode =
   maxLineLengthHighlight: 10000,                       // diff 변경사항 강조 표시할 라인의 최대 길이
   renderNothingWhenEmpty: false                        // 변경사항이 없을 때 아무것도 렌더링 안할지 여부
 }`
+
+onMounted(() => {
+  loadSampleData()
+})
 </script>
 
 <template>
@@ -231,31 +235,11 @@ const advancedUsageCode =
       <div class="options">
         <div>
           <label>
-            <input 
-              v-model="options.drawFileList" 
-              type="checkbox"
-            />
-            파일 목록 표시
-          </label>
-        </div>
-        
-        <div>
-          <label>
             출력 형식:
             <select v-model="options.outputFormat">
               <option value="line-by-line">Line by Line</option>
               <option value="side-by-side">Side by Side</option>
             </select>
-          </label>
-        </div>
-        
-        <div>
-          <label>
-            <input 
-              v-model="options.highlight" 
-              type="checkbox"
-            />
-            구문 강조
           </label>
         </div>
       </div>
@@ -266,11 +250,8 @@ const advancedUsageCode =
           <span class="additions">+{{ stats.added }} additions</span>
           <span class="deletions">-{{ stats.removed }} deletions</span>
         </div>
-        <div v-if="loading">
-          Generating diff...
-        </div>
         
-        <div v-else-if="error">
+        <div v-if="error">
           {{ error }}
         </div>
         
@@ -279,7 +260,6 @@ const advancedUsageCode =
           ref="diffContainer"
           v-html="diffHtml"
         ></div>
-        
         <div v-else>
           텍스트를 입력하고 'Diff 생성' 버튼을 클릭하세요
         </div>
