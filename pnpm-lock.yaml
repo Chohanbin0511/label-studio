@@ -30,7 +30,7 @@ importers:
         specifier: ^3.4.51
         version: 3.4.51
       element-plus:
-        specifier: ^2.9.3
+        specifier: ^2.9.11
         version: 2.9.11(vue@3.5.16(typescript@5.8.3))
       label-studio:
         specifier: ^1.0.1

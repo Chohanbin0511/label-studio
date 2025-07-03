@@ -19,6 +19,8 @@ declare module 'vue-router/auto-routes' {
    */
   export interface RouteNamedMap {
     '/DiffDemo': RouteRecordInfo<'/DiffDemo', '/DiffDemo', Record<never, never>, Record<never, never>>,
-    '/label-studio': RouteRecordInfo<'/label-studio', '/label-studio', Record<never, never>, Record<never, never>>,
+    '/DiffDemoSample': RouteRecordInfo<'/DiffDemoSample', '/DiffDemoSample', Record<never, never>, Record<never, never>>,
+    '/DraggableTable': RouteRecordInfo<'/DraggableTable', '/DraggableTable', Record<never, never>, Record<never, never>>,
+    '/LabelStudio': RouteRecordInfo<'/LabelStudio', '/LabelStudio', Record<never, never>, Record<never, never>>,
   }
 }

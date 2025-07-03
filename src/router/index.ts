@@ -8,11 +8,15 @@ const routes = [
   },
   {
     path: '/label-studio',
-    component: () => import('../pages/label-studio.vue')
+    component: () => import('../pages/LabelStudio.vue')
   },
   {
     path: '/diff-demo',
     component: () => import('../pages/DiffDemo.vue')
+  },
+  {
+    path: '/draggable-table',
+    component: () => import('../pages/DraggableTable.vue')
   },
 ]
 
