@@ -46,24 +46,24 @@ const data = ref([
 </script> 
 
 <template>
-<div class="draggable-table">
-  <h2>Try to drag the row or column's header.</h2>
-  <el-table 
-   class="draggable-container"
-   :key="tableKey"
-   border
-   v-draggable="dragOptions"
-   :data="data"
-  >
+  <div class="draggable-table">
+    <h2>Try to drag the row or column's header.</h2>
+    <el-table 
+      class="draggable-container"
+      :key="tableKey"
+      border
+      v-draggable="dragOptions"
+      :data="data"
+    >
   
-  <el-table-column    
-    v-for="item in columns"
-    :key="item.prop"
-    :prop="item.prop"
-    :label="item.label"
+    <el-table-column    
+      v-for="item in columns"
+      :key="item.prop"
+      :prop="item.prop"
+      :label="item.label"
     />
-  </el-table>
-</div>
+    </el-table>
+  </div>
 </template>
 
 <style scoped>
