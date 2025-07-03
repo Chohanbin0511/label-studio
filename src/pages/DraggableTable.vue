@@ -3,15 +3,24 @@ import { ElMessage } from "element-plus";
 import { ref } from "vue";
 import { vDraggable, createDragOptions } from '@/utils/draggable-handlers';
 
+// 테이블 리렌더링을 위한 key
+const tableKey = ref(0);
+
 // 커스텀 onEnd 콜백 함수 정의
 const handleDragEnd = (evt: any) => {
     ElMessage.success(
-        `App.vue에서 처리: ${evt.oldIndex}번째 행을 ${evt.newIndex}번째로 이동`
+        `DraggableTable에서 처리: ${evt.oldIndex}번째 행을 ${evt.newIndex}번째로 이동`
     );
-    console.log('App.vue에서 받은 드래그 이벤트:', evt);
-    // 실제 데이터 순서 변경 (필요시)
-    // const movedItem = data.value.splice(evt.oldIndex, 1)[0];
-    // data.value.splice(evt.newIndex, 0, movedItem);
+    console.log('DraggableTable에서 받은 드래그 이벤트:', evt);
+    console.log('변경 전 데이터:', data.value);
+    
+    const newData = JSON.parse(JSON.stringify(data.value));
+
+    const movedItem = newData.splice(evt.oldIndex, 1)[0]; // 이동할 아이템 추출
+    newData.splice(evt.newIndex, 0, movedItem); // 새 위치에 삽입
+    data.value = newData; // 새로운 배열로 교체
+    tableKey.value++; // 테이블 강제 리렌더링
+    console.log("변경 후 데이터:", data.value);
 };
 
 // util.js의 함수를 사용해서 dragOptions 생성
@@ -41,7 +50,7 @@ const data = ref([
   <h2>Try to drag the row or column's header.</h2>
   <el-table 
    class="draggable-container"
-   key="id"
+   :key="tableKey"
    border
    v-draggable="dragOptions"
    :data="data"
